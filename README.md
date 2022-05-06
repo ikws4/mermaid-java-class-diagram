@@ -10,11 +10,10 @@ The source above is coming from [divotkey/ecs](https://github.com/divotkey/ecs)
 
 ### Build
 ```bash
-./gradlew assemble
-unzip app/build/distributions/app.zip -d dist/
+make build
 ```
 
 ### Run
 ```bash
-./dist/app/bin/app <source-root> <output-dir>
+./mjcd <source-root> <output-dir>
 ```

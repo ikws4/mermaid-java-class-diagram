@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./dist/app/bin/app $1 $2

@@ -32,7 +32,7 @@ class ClassDiagramRelationVisitor extends VoidVisitorWithDefaults<String> {
   public void visit(FieldDeclaration node, String prefix) {
     String type = node.getElementType().asString();
 
-    if (type.contains("List") || type.contains("Set")) {
+    if ((type.contains("List") || type.contains("Set")) && type.contains("<")) {
       type = type.substring(type.indexOf("<") + 1, type.lastIndexOf(">"));
       if (classNames.contains(type)) {
         println(prefix, " --> " + convertGenericType(type) + " : has many");
@@ -71,7 +71,7 @@ class ClassDiagramRelationVisitor extends VoidVisitorWithDefaults<String> {
   //     return type;
   //   }
   // }
-  
+
   private String convertGenericType(String type) {
     char[] chars = type.toCharArray();
     boolean found = false;

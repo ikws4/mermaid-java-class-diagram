@@ -13,13 +13,14 @@ import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.utils.SourceRoot.Callback;
 
 public class Main {
-  public static boolean printField, printMethod;
+  public static boolean printField, printMethod, onlyPrintPublic;
   
   public static void main(String[] args) throws IOException {
     if (args.length < 2) {
-      System.out.println("Usage: mjcd -[fm] <source-path> <output-path>");
+      System.out.println("Usage: mjcd -[fmp] <source-path> <output-path>");
       System.out.println("  -f print field");
       System.out.println("  -m print method");
+      System.out.println("  -p only print public field and method");
       System.exit(1);
     }
 
@@ -31,6 +32,9 @@ public class Main {
       }
       if (opt.contains("m")) {
         printMethod = true;
+      }
+      if (opt.contains("p")) {
+        onlyPrintPublic = true;
       }
       sourcePath = args[1];
       outputPath = args[2];

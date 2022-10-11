@@ -14,11 +14,11 @@ import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 class ClassDiagramDefineVisitor extends VoidVisitorWithDefaults<String> {
   private Set<String> classNames;
   private int classDepth = 0;
-  
+
   ClassDiagramDefineVisitor(Set<String> classNames) {
     this.classNames = classNames;
   }
-  
+
   @Override
   public void visit(ClassOrInterfaceDeclaration node, String indent) {
     classDepth++;
@@ -40,7 +40,7 @@ class ClassDiagramDefineVisitor extends VoidVisitorWithDefaults<String> {
       classNames.add(className);
     }
 
-    
+
     if (classDepth > 1) {
       indent = "  ";
       println(indent, "");
@@ -77,10 +77,12 @@ class ClassDiagramDefineVisitor extends VoidVisitorWithDefaults<String> {
   public void visit(FieldDeclaration node, String indent) {
     if (Main.printField) {
       String visibility = getVisibilityChar(node);
-      String type = convertGenericType(node.getElementType());
-      String varName = node.getVariable(0).getNameAsString();
+      if (Main.onlyPrintPublic && visibility == "+") {
+        String type = convertGenericType(node.getElementType());
+        String varName = node.getVariable(0).getNameAsString();
 
-      println(indent, visibility + type + " " + varName);
+        println(indent, visibility + type + " " + varName);
+      }
     }
     super.visit(node, indent);
   }
@@ -89,14 +91,16 @@ class ClassDiagramDefineVisitor extends VoidVisitorWithDefaults<String> {
   public void visit(MethodDeclaration node, String indent) {
     if (Main.printMethod) {
       String visibility = getVisibilityChar(node);
-      String methodName = node.getNameAsString();
-      String returnType = convertGenericType(node.getType());
-      String args = node.getParameters()
-        .stream()
-        .map(p -> convertGenericType(p.getType()) + " " + p.getNameAsString())
-        .collect(Collectors.joining(", "));
+      if (Main.onlyPrintPublic && visibility == "+") {
+        String methodName = node.getNameAsString();
+        String returnType = convertGenericType(node.getType());
+        String args = node.getParameters()
+          .stream()
+          .map(p -> convertGenericType(p.getType()) + " " + p.getNameAsString())
+          .collect(Collectors.joining(", "));
 
-      println(indent, visibility + methodName + "(" + args + ") " + returnType);
+        println(indent, visibility + methodName + "(" + args + ") " + returnType);
+      }
     }
     super.visit(node, indent);
   }
@@ -157,7 +161,7 @@ class ClassDiagramDefineVisitor extends VoidVisitorWithDefaults<String> {
     }
     return builder.toString();
   }
-  
+
   private String convertGenericType(String type) {
     char[] chars = type.toCharArray();
     boolean found = false;

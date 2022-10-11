@@ -75,25 +75,29 @@ class ClassDiagramDefineVisitor extends VoidVisitorWithDefaults<String> {
 
   @Override
   public void visit(FieldDeclaration node, String indent) {
-    String visibility = getVisibilityChar(node);
-    String type = convertGenericType(node.getElementType());
-    String varName = node.getVariable(0).getNameAsString();
+    if (Main.printField) {
+      String visibility = getVisibilityChar(node);
+      String type = convertGenericType(node.getElementType());
+      String varName = node.getVariable(0).getNameAsString();
 
-    println(indent, visibility + type + " " + varName);
+      println(indent, visibility + type + " " + varName);
+    }
     super.visit(node, indent);
   }
 
   @Override
   public void visit(MethodDeclaration node, String indent) {
-    String visibility = getVisibilityChar(node);
-    String methodName = node.getNameAsString();
-    String returnType = convertGenericType(node.getType());
-    String args = node.getParameters()
-      .stream()
-      .map(p -> convertGenericType(p.getType()) + " " + p.getNameAsString())
-      .collect(Collectors.joining(", "));
+    if (Main.printMethod) {
+      String visibility = getVisibilityChar(node);
+      String methodName = node.getNameAsString();
+      String returnType = convertGenericType(node.getType());
+      String args = node.getParameters()
+        .stream()
+        .map(p -> convertGenericType(p.getType()) + " " + p.getNameAsString())
+        .collect(Collectors.joining(", "));
 
-    println(indent, visibility + methodName + "(" + args + ") " + returnType);
+      println(indent, visibility + methodName + "(" + args + ") " + returnType);
+    }
     super.visit(node, indent);
   }
 

@@ -13,18 +13,39 @@ import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.utils.SourceRoot.Callback;
 
 public class Main {
+  public static boolean printField, printMethod;
+  
   public static void main(String[] args) throws IOException {
     if (args.length < 2) {
-      System.out.println("Usage: mjcd <source-root> <output-dir>");
+      System.out.println("Usage: mjcd -[fm] <source-path> <output-path>");
+      System.out.println("  -f print field");
+      System.out.println("  -m print method");
       System.exit(1);
     }
 
-    System.setOut(new PrintStream(new File(args[1])));
+    String opt = args[0];
+    String sourcePath = null, outputPath = null;
+    if (opt.charAt(0) == '-') {
+      if (opt.contains("f")) {
+        printField = true;
+      }
+      if (opt.contains("m")) {
+        printMethod = true;
+      }
+      sourcePath = args[1];
+      outputPath = args[2];
+    } else {
+      sourcePath = opt;
+      outputPath = args[1];
+    }
 
-    Path path = Paths.get(args[0]);
+    System.setOut(new PrintStream(new File(outputPath)));
+
+    Path path = Paths.get(sourcePath);
     SourceRoot sourceRoot = new SourceRoot(path);
     System.out.println("classDiagram");
     Set<String> classNames = new HashSet<>();
+    
     sourceRoot.parse("", new Callback() {
       @Override
       public Result process(Path localPath, Path absolutePath,

@@ -15,5 +15,5 @@ make build
 
 ### Run
 ```bash
-./mjcd <source-root> <output-dir>
+./mjcd -fm <source-root> <output-dir>
 ```

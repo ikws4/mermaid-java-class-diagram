@@ -66,7 +66,7 @@ public class Main {
       public Result process(Path localPath, Path absolutePath,
           ParseResult<CompilationUnit> result) {
         result.ifSuccessful(cu -> {
-          cu.accept(new ClassDiagramExtendAndImplVisitor(), "");
+          cu.accept(new ClassDiagramExtendAndImplVisitor(), null);
         });
         System.out.println();
         return Result.DONT_SAVE;
@@ -77,7 +77,7 @@ public class Main {
       public Result process(Path localPath, Path absolutePath,
           ParseResult<CompilationUnit> result) {
         result.ifSuccessful(cu -> {
-          cu.accept(new ClassDiagramRelationVisitor(classNames), null);
+          cu.accept(new ClassDiagramRelationVisitor(classNames), "");
         });
         System.out.println();
         return Result.DONT_SAVE;

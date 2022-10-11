@@ -14,7 +14,7 @@ import com.github.javaparser.utils.SourceRoot.Callback;
 
 public class Main {
   public static boolean printField, printMethod, onlyPrintPublic;
-  
+
   public static void main(String[] args) throws IOException {
     if (args.length < 2) {
       System.out.println("Usage: mjcd -[fmp] <source-path> <output-path>");
@@ -49,7 +49,7 @@ public class Main {
     SourceRoot sourceRoot = new SourceRoot(path);
     System.out.println("classDiagram");
     Set<String> classNames = new HashSet<>();
-    
+
     sourceRoot.parse("", new Callback() {
       @Override
       public Result process(Path localPath, Path absolutePath,
@@ -66,7 +66,18 @@ public class Main {
       public Result process(Path localPath, Path absolutePath,
           ParseResult<CompilationUnit> result) {
         result.ifSuccessful(cu -> {
-          cu.accept(new ClassDiagramRelationVisitor(classNames), "");
+          cu.accept(new ClassDiagramExtendAndImplVisitor(), "");
+        });
+        System.out.println();
+        return Result.DONT_SAVE;
+      }
+    });
+    sourceRoot.parse("", new Callback() {
+      @Override
+      public Result process(Path localPath, Path absolutePath,
+          ParseResult<CompilationUnit> result) {
+        result.ifSuccessful(cu -> {
+          cu.accept(new ClassDiagramRelationVisitor(classNames), null);
         });
         System.out.println();
         return Result.DONT_SAVE;

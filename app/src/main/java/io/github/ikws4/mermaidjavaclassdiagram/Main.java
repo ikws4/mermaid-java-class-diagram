@@ -21,7 +21,7 @@ public class Main {
 
     System.setOut(new PrintStream(new File(args[1])));
 
-    Path path = Paths.get(System.getProperty("user.dir"), args[0]);
+    Path path = Paths.get(args[0]);
     SourceRoot sourceRoot = new SourceRoot(path);
     System.out.println("classDiagram");
     Set<String> classNames = new HashSet<>();

@@ -43,7 +43,14 @@ public class Main {
       outputPath = args[1];
     }
 
-    System.setOut(new PrintStream(new File(outputPath)));
+    File outputDir = new File(outputPath);
+    if (!outputDir.exists()) {
+      if (outputDir.mkdirs() == false) {
+        System.out.println("Can't not create output directory: " + outputPath);
+        System.exit(1);
+      }
+    }
+    System.setOut(new PrintStream(new File(outputPath + "/" + getLastDirectoryName(sourcePath))));
 
     Path path = Paths.get(sourcePath);
     SourceRoot sourceRoot = new SourceRoot(path);
@@ -83,5 +90,10 @@ public class Main {
         return Result.DONT_SAVE;
       }
     });
+  }
+
+  private static String getLastDirectoryName(String sourcePath) {
+    String[] parts = sourcePath.split("/");
+    return parts[parts.length - 1];
   }
 }

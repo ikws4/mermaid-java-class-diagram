@@ -50,7 +50,7 @@ public class Main {
         System.exit(1);
       }
     }
-    System.setOut(new PrintStream(new File(outputPath + "/" + getLastDirectoryName(sourcePath))));
+    System.setOut(new PrintStream(new File(outputPath + "/" + getLastDirectoryName(sourcePath)) + ".mmd"));
 
     Path path = Paths.get(sourcePath);
     SourceRoot sourceRoot = new SourceRoot(path);

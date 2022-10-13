@@ -49,11 +49,14 @@ class ClassDiagramDefineVisitor extends BaseVisitor<String> {
     if (Main.printField) {
       String visibility = NodeUtil.getVisibilityChar(node);
       if (insideInterface && visibility == "~") visibility = "+";
-      if (Main.onlyPrintPublic && visibility == "+") {
-        String type = NodeUtil.convertGenericType(node.getElementType());
-        String varName = node.getVariable(0).getNameAsString();
 
-        System.out.println(indent + visibility + type + " " + varName);
+      if ((Main.onlyPrintPublic && visibility == "+") || !Main.onlyPrintPublic) {
+        if (visibility == "+") {
+          String type = NodeUtil.convertGenericType(node.getElementType());
+          String varName = node.getVariable(0).getNameAsString();
+
+          System.out.println(indent + visibility + type + " " + varName);
+        }
       }
     }
     super.visit(node, indent);
@@ -64,7 +67,7 @@ class ClassDiagramDefineVisitor extends BaseVisitor<String> {
     if (Main.printMethod) {
       String visibility = NodeUtil.getVisibilityChar(node);
       if (insideInterface && visibility == "~") visibility = "+";
-      if (Main.onlyPrintPublic && visibility == "+") {
+      if ((Main.onlyPrintPublic && visibility == "+") || !Main.onlyPrintPublic) {
         String methodName = node.getNameAsString();
         String returnType = NodeUtil.convertGenericType(node.getType());
         String args = node.getParameters()
